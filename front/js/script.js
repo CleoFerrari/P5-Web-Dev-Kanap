@@ -1,24 +1,29 @@
-const apiUrl = `http://localhost:3000/api/products`;
+const apiUrl = "http://localhost:3000/api/products";
+const items = document.getElementById('items')
 
-const items = document.getElementById(`items`)
+//Display all the products home page
 
 const getData = async () => {
-    try {
+  try {
 
-        const response = await fetch(apiUrl);
-        const jsonResponse = await response.json();
+    const response = await fetch(apiUrl);
+    const jsonResponse = await response.json();
 
-        jsonResponse.forEch(product => {
-            items.innerHTML += `
-            <a href="./product.html?id=${product._id}">
+    jsonResponse.forEach(product => {
+      items.innerHTML += `
+             <a href="./product.html?id=${product._id}">
             <article>
-              <img src="${product.imageUrl}" alt="${product.altText}">            
+              <img src="${product.imageUrl}" alt="${product.altText}">
               <h3 class="productName">${product.name}</h3>
-              <p class="productDescription">${product.description}</p>  
+              <p class="productDescription">${product.description}</p>
             </article>
-            </a>`;
-        })
-    } catch (error) {
-        console.log(error)
-    }
+          </a>`;
+
+    })
+
+  } catch (error) {
+    console.log(error)
+  }
 }
+
+getData();
