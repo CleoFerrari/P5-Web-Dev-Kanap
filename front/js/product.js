@@ -1,78 +1,73 @@
-
-const apiUrl = "http://localhost:3000/api/products";
-const items = document.getElementById('items')
-
-const queryString = window.location.search;
+const apiUrl = "http://localhost:3000/api/products/[0]";
 
 //Using URLSearchParams to display the choose item
 const urlParams = new URLSearchParams(window.location.search);
-
-const item = urlParams.get('items');
-
+const items = urlParams.get('items');
 console.log(`items`);
 
+const productImage = document.getElementById('item__img');
+const title = document.getElementById('title');
+const price = document.getElementById('price');
+const description = document.getElementById('description');
+const colors = document.getElementById('colors');
+const quantity = document.getElementById('quantity');
+const addToCart = document.getElementById('addToCart');
 
-// Function to get item image
-fetch(apiUrl)
-  .then(response => {
-    const json = response.json()
-    return json;
-  })
-  .then(data => {
-    displayItem(data)
-    itemChosen = data;
-  })
-  .catch(err => console.log(err));
 
-// function to get item information 
-const itemImg = document.getElementsByClassName('item__img');
-const getData = async () => {
+const getProduct = async () => {
   try {
-    const response = await fetch(apiUrl);
+
+    //fetching data
+    const response = await fetch(apiUrl + '/' + productId)
+    console.log(apiUrl + '/' + productId)
     const jsonResponse = await response.json();
+    console.log(jsonResponse)
 
-    jsonResponse.forEach(product => {
-      items.innerHTML += `
-    <article>
-            <div class="item__img">
-              <<img src="${product.imageUrl}" alt="${product.altText}"> 
-            </div>
-            <div class="item__content">
-
-              <div class="item__content__titlePrice">
-                <h1 id="title"><!-- Nom du produit --></h1>
-                <p>Prix : <span id="price">${product.price}</span>€</p>
-              </div>
-
-              <div class="item__content__description">
-                <p class="item__content__description__title">Description:</p>
-                <p id="description">${product.description}</p>
-              </div>
-
-              <div class="item__content__settings">
-                <div class="item__content__settings__color">
-                  <label for="color-select">Chose your color:</label>
-                  <select name="color-select" id="colors"${product.color}>
-                      <option value="">--Please, select a color --</option>
-<                      <option value="vert">vert</option>
-                      <option value="blanc">blanc</option> 
-                  </select>
-                </div>
-
-                <div class="item__content__settings__quantity">
-                  <label for="itemQuantity">Number of articles (1-100):</label>
-                  <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
-                </div>
-              </div>
-
-              <div class="item__content__addButton">
-                <button id="addToCart">Add to cart</button>
-              </div>
-
-            </div>
-          </article>`;
+    // display product inside html with the fetched data
+    // productImage.innerHTML += `<img src="${jsonResponse.imageUrl}">`;
+    description.innerHTML += `${jsonResponse.description}`;
+    title.innerHTML += `${jsonResponse.name}`;
+    price.innerHTML += `${jsonResponse.price}`;
+    colors.innerHTML = `
+            <option value="">--Please, select a color --</option>
+            ${jsonResponse.colors.map(color => {
+      return `<option value="${color}"> ${color}</option>`;
     })
+      }`;
+
+    setItems(jsonResponse);
+
   } catch (error) {
     console.log(error)
   }
 };
+
+// Set Items to local storage
+const setItems = (product) => {
+
+  addToCart.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    if (quantity.value > 0) {
+
+      //cart object
+      let cartObject = {
+        id: product._id,
+        name: product.name,
+        color: colors.value,
+        price: product.price,
+        qty: quantity.value,
+        image: product.imageUrl,
+        alt: product.altTxt
+      }
+
+      const itemKey = `${product._id}, ${colors.value}`;
+      window.localStorage.setItem(itemKey, JSON.stringify(cartObject));
+    }
+
+    window.location.href = "cart.html"
+  })
+}
+
+
+getProduct();

@@ -1,6 +1,29 @@
 {
   "dependencies": {
+    "express": "^4.18.1",
     "node": "^18.4.0",
-    "server": "^1.0.37"
-  }
+    "nodemon": "^2.0.18",
+    "server": "^1.0.37",
+    "server.js": "^1.0.0"
+  },
+  "name": "server.js",
+  "description": "This is the front end and back end server for Project 5 of the Web Developer path.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CleoFerrari/P5-Web-Dev-Kanap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CleoFerrari/P5-Web-Dev-Kanap/issues"
+  },
+  "homepage": "https://github.com/CleoFerrari/P5-Web-Dev-Kanap#readme",
+  "keywords": [
+    "server.npm"
+  ]
 }
